@@ -262,7 +262,8 @@ def usage():
 
 #
 # ==============================================================================
-if __name__ == "__main__":
+def main():
+
     options, fns = parse_options()
 
     if not fns:
@@ -286,3 +287,7 @@ if __name__ == "__main__":
             plotter = Scatter(options)
 
         plotter.create(data)
+
+
+if __name__ == "__main__":
+    main()
