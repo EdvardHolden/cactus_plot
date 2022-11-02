@@ -1,15 +1,15 @@
 #!/usr/bin/env python
-#-*- coding:utf-8 -*-
-##
-## scatter.py
-##
-##  Created on: Jun 05, 2015
-##      Author: Alexey S. Ignatiev
-##      E-mail: aignatiev@ciencias.ulisboa.pt
-##
+# -*- coding:utf-8 -*-
+#
+# scatter.py
+#
+#  Created on: Jun 05, 2015
+#      Author: Alexey S. Ignatiev
+#      E-mail: aignatiev@ciencias.ulisboa.pt
+#
 
 #
-#==============================================================================
+# ==============================================================================
 import json
 import math
 import matplotlib.pyplot as plt
@@ -17,25 +17,24 @@ from matplotlib import __version__ as mpl_version
 import numpy as np
 from plot import Plot
 import six
-from six.moves import range
 
 
 #
-#==============================================================================
+# ==============================================================================
 class ScatterException(Exception):
     pass
 
 
 #
-#==============================================================================
+# ==============================================================================
 class Scatter(Plot, object):
     """
-        Scatter plot class.
+    Scatter plot class.
     """
 
     def __init__(self, options):
         """
-            Scatter constructor.
+        Scatter constructor.
         """
 
         super(Scatter, self).__init__(options)
@@ -51,7 +50,7 @@ class Scatter(Plot, object):
         if not self.y_max:
             self.y_max = 0
         if self.x_max and self.y_max and self.x_max != self.y_max:
-            assert 0, 'right-most positions must be the same for X and Y axes'
+            assert 0, "right-most positions must be the same for X and Y axes"
         elif self.x_max == 0 and self.y_max == 0:
             self.x_max = 10
             while self.x_max < self.timeout:
@@ -62,62 +61,84 @@ class Scatter(Plot, object):
 
         # setting timeout-line label
         if not self.t_label:
-            self.t_label = '{0} sec. timeout'.format(int(self.timeout))
+            self.t_label = "{0} sec. timeout".format(int(self.timeout))
 
-        with open(self.def_path, 'r') as fp:
-            self.marker_style = json.load(fp)['scatter_style']
+        with open(self.def_path, "r") as fp:
+            self.marker_style = json.load(fp)["scatter_style"]
 
     def create(self, data):
         """
-            Does the plotting.
+        Does the plotting.
         """
 
         if len(data[0][1]) != len(data[1][1]):
-            raise ScatterException('Number of instances for each competitor must be the same')
+            raise ScatterException("Number of instances for each competitor must be the same")
 
         step = math.ceil((self.x_max - self.x_min) / 10)
         x = np.arange(self.x_min, self.x_max + self.x_min + step, step)
 
         # "good" area
-        plt.plot(x, x, color='black', ls=':', lw=1.5, zorder=3)
-        plt.plot(x, 0.1 * x, 'g:', lw=1.5, zorder=3)
-        plt.plot(x, 10 * x, 'g:', lw=1.5, zorder=3)
-        plt.fill_between(x, 0.1 * x, 10 * x, facecolor='green', alpha=0.15,
-            zorder=3)
+        plt.plot(x, x, color="black", ls=":", lw=1.5, zorder=3)
+        plt.plot(x, 0.1 * x, "g:", lw=1.5, zorder=3)
+        plt.plot(x, 10 * x, "g:", lw=1.5, zorder=3)
+        plt.fill_between(x, 0.1 * x, 10 * x, facecolor="green", alpha=0.15, zorder=3)
 
         plt.xlim([self.x_min, self.x_max])
         plt.ylim([self.y_min, self.y_max])
 
         # timeout lines
-        if self.tlb_loc != 'none':
-            plt.axvline(self.timeout, linewidth=1, color='red', ls=':',
-                label=str(self.timeout), zorder=3)
-            plt.axhline(self.timeout, linewidth=1, color='red', ls=':',
-                label=str(self.timeout), zorder=3)
+        if self.tlb_loc != "none":
+            plt.axvline(self.timeout, linewidth=1, color="red", ls=":", label=str(self.timeout), zorder=3)
+            plt.axhline(self.timeout, linewidth=1, color="red", ls=":", label=str(self.timeout), zorder=3)
 
-            if self.tlb_loc == 'after':
-                plt.text(2 * self.x_min, self.timeout + self.x_max / 40,
-                    self.t_label, horizontalalignment='left',
-                    verticalalignment='bottom', fontsize=self.f_props['size'] * 0.8)
-                plt.text(self.timeout + self.x_max / 40, 2 * self.x_min,
-                    self.t_label, horizontalalignment='left',
-                    verticalalignment='bottom', fontsize=self.f_props['size'] * 0.8,
-                    rotation=90)
+            if self.tlb_loc == "after":
+                plt.text(
+                    2 * self.x_min,
+                    self.timeout + self.x_max / 40,
+                    self.t_label,
+                    horizontalalignment="left",
+                    verticalalignment="bottom",
+                    fontsize=self.f_props["size"] * 0.8,
+                )
+                plt.text(
+                    self.timeout + self.x_max / 40,
+                    2 * self.x_min,
+                    self.t_label,
+                    horizontalalignment="left",
+                    verticalalignment="bottom",
+                    fontsize=self.f_props["size"] * 0.8,
+                    rotation=90,
+                )
             else:
-                plt.text(2 * self.x_min, self.timeout - self.x_max / 3.5,
-                    self.t_label, horizontalalignment='left',
-                    verticalalignment='bottom', fontsize=self.f_props['size'] * 0.8)
-                plt.text(self.timeout - self.x_max / 3.5, 2 * self.x_min,
-                    self.t_label, horizontalalignment='left',
-                    verticalalignment='bottom', fontsize=self.f_props['size'] * 0.8,
-                    rotation=90)
+                plt.text(
+                    2 * self.x_min,
+                    self.timeout - self.x_max / 3.5,
+                    self.t_label,
+                    horizontalalignment="left",
+                    verticalalignment="bottom",
+                    fontsize=self.f_props["size"] * 0.8,
+                )
+                plt.text(
+                    self.timeout - self.x_max / 3.5,
+                    2 * self.x_min,
+                    self.t_label,
+                    horizontalalignment="left",
+                    verticalalignment="bottom",
+                    fontsize=self.f_props["size"] * 0.8,
+                    rotation=90,
+                )
 
         # scatter
-        plt.scatter(data[0][1], data[1][1], c=self.marker_style['color'],
-            marker=self.marker_style['marker'],
-            edgecolors=self.marker_style['edgecolor'],
-            s=self.marker_style['size'],
-            alpha=self.alpha, zorder=5)
+        plt.scatter(
+            data[0][1],
+            data[1][1],
+            c=self.marker_style["color"],
+            marker=self.marker_style["marker"],
+            edgecolors=self.marker_style["edgecolor"],
+            s=self.marker_style["size"],
+            alpha=self.alpha,
+            zorder=5,
+        )
 
         # axes' labels
         if self.x_label:
@@ -132,12 +153,12 @@ class Scatter(Plot, object):
 
         # turning the grid on
         if not self.no_grid:
-            plt.grid(True, color='black', ls=':', lw=1, zorder=1)
+            plt.grid(True, color="black", ls=":", lw=1, zorder=1)
 
         # choosing logarithmic scales
         ax = plt.gca()
-        ax.set_xscale('log')
-        ax.set_yscale('log')
+        ax.set_xscale("log")
+        ax.set_yscale("log")
 
         # setting ticks font properties
         # set_*ticklables() seems to be not needed in matplotlib 1.5.0
@@ -154,7 +175,7 @@ class Scatter(Plot, object):
         for i in six.itervalues(ax.spines):
             i.set_linewidth(1)
 
-        plt.savefig(self.save_to, bbox_inches='tight', transparent=self.transparent)
+        plt.savefig(self.save_to, bbox_inches="tight", transparent=self.transparent)
 
     # def create(self, data):
     #     """
