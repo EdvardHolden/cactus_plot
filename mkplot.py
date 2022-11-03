@@ -188,7 +188,7 @@ def get_parser():
 
     parser.add_argument(
         "--def_path",
-        default="config.json",
+        default="defaults.json",
         help="Config file for loading the other paramters. Slightly strange...",
     )
 
@@ -211,7 +211,6 @@ def get_parser():
         "-d",
         "--dry-run",
         action="store_true",
-        default=False,
         help="Do not create a plot but instead show the tools sorted in the terminal",
     )
     parser.add_argument(
@@ -256,7 +255,7 @@ def get_parser():
     parser.add_argument("--lgd_ncol", type=int, default=1, help="Number of columns in the legend")
 
     parser.add_argument(
-        "-n", "--by_name", default=False, action="store_true", help="Assign line style to tools by their name"
+        "-n", "--by_name", action="store_true", help="Assign line style to tools by their name"
     )
     parser.add_argument("--only", nargs="*", default=None, help="Comma-separated list of names")
     parser.add_argument(
@@ -270,7 +269,7 @@ def get_parser():
     parser.add_argument(
         "-r", "--replace", type=str, default=None, help="List of name replacements"
     )  # Format: {"name1": "$nice_name1$", "name2": "$nice_name2$"}
-    parser.add_argument("--reverse", action="store_true", default=False, help="Use reversed sorting")
+    parser.add_argument("--reverse", action="store_true", help="Use reversed sorting")
     parser.add_argument("--save-to", type=str, default="plot", help="Where result figure should be saved")
     parser.add_argument(
         "--shape",
@@ -288,24 +287,18 @@ def get_parser():
         choices=["before", "after"],
         help="Where to put the timeout label",
     )
-    parser.add_argument(
-        "--transparent", action="store_true", default=False, help="Save the file in the transparent mode"
-    )
+    parser.add_argument("--transparent", action="store_true", help="Save the file in the transparent mode")
     parser.add_argument(
         "--vbs", type=str, default=None, help="List of VBSes"
     )  # Format: {"vbs1": ["tool1", "tool2"], "vbs2": "all"}
-    parser.add_argument("--xkcd", action="store_true", default=False, help="Use xkcd-style sketch plotting")
+    parser.add_argument("--xkcd", action="store_true", help="Use xkcd-style sketch plotting")
 
     parser.add_argument("--x_label", type=str, help="X label")
-    parser.add_argument(
-        "--x_log", action="store_true", default=False, help="Use logarithmic scale for X axis"
-    )
+    parser.add_argument("--x_log", action="store_true", help="Use logarithmic scale for X axis")
     parser.add_argument("--x_max", type=int, default=None, help="X axis ends at this value")
     parser.add_argument("--x_min", type=int, default=0, help="X axis starts from this value")
     parser.add_argument("--y_label", type=str, help="Y label")
-    parser.add_argument(
-        "--y_log", action="store_true", default=False, help="Use logarithmic scale for Y axis"
-    )
+    parser.add_argument("--y_log", action="store_true", help="Use logarithmic scale for Y axis")
     parser.add_argument("--y_max", type=int, default=None, help="Y axis ends at this value")
     parser.add_argument("--y_min", type=int, default=0, help="Y axis starts from this value")
 
