@@ -184,7 +184,7 @@ def get_parser():
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("data_files", nargs="+", help="Path to the json data files")
+    parser.add_argument("data", nargs="+", help="Path to the json data files")
 
     parser.add_argument(
         "--def_path",
@@ -395,46 +395,17 @@ def usage():
 # ==============================================================================
 def main():
 
-    # TODO separate argument for files
-
     parser = get_parser()
     args = parser.parse_args()
+    args = vars(args)  # Use dict style
 
-    print()
-    print(args)
-    print()
+    # Load the data
+    data = load_data(args["data"], args)
 
-    options, fns = parse_options()
-
-    print()
-    print(options)
-    print()
-    print(fns)
-    print()
-    print()
-
-    d = vars(args)
-    print(d)
-    print()
-    for k, v in options.items():
-        if k not in args or v != d[k]:
-            print("Issues")
-            print("original", k, v)
-            print("new", d[k])
-            print()
-        else:
-            print("Good")
-
-    # sys.exit(0)
-
-    if not fns:
-        pass  # error handling
-
-    data = load_data(fns, options)
-
-    if options["dry_run"]:
+    # Check if computing stats or plotting
+    if args["dry_run"]:
         for d in data:
-            d1 = list(map(lambda x: min(x, options["timeout"]), d[1]))
+            d1 = list(map(lambda x: min(x, args["timeout"]), d[1]))
 
             print("{0}:".format(d[0]))
             print("    # solved: {0}".format(d[2]))
@@ -442,11 +413,13 @@ def main():
             print("    max. val: {0:.1f}".format(float(max(d1))))
             print("    avg. val: {0:.1f}".format(float(sum(d1)) / len(d1)))
     else:
-        if options["plot_type"] == "cactus":
-            plotter = Cactus(options)
+        # Initialise plotting style
+        if args["plot_type"] == "cactus":
+            plotter = Cactus(args)
         else:
-            plotter = Scatter(options)
+            plotter = Scatter(args)
 
+        # Create the plot
         plotter.create(data)
 
 
