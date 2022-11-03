@@ -61,13 +61,13 @@
         "lgd_ncol": 1,
         "only": null,
         "plot_type": "cactus",
-        "repls": null,
+        "replace": null,
         "reverse": false,
         "save_to": "plot",
         "shape": "standard",
         "timeout": 3600.0,
         "t_label": null,
-        "tlb_loc": "after",
+        "tol_loc": "after",
         "transparent": false,
         "usetex": false,
         "vbs": null,
@@ -78,7 +78,7 @@
         "x_max": null,
         "y_label": null,
         "y_log": false,
-        "y_min": 0.000000001,
+        "y_min": 0,
         "y_max": null
     }
 }

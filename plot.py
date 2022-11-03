@@ -35,7 +35,7 @@ class Plot:
 
         self.timeout = options["timeout"]
         self.t_label = options["t_label"]
-        self.tlb_loc = options["tlb_loc"]
+        self.tol_loc = options["tol_loc"]
 
         self.x_label = options["x_label"]
         self.x_log = options["x_log"]

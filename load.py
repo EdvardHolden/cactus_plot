@@ -153,9 +153,10 @@ def load_json(stat_arr, options):
     if options["only"]:
         data = [d for d in data if d[0] in options["only"]]
 
-    if options["repls"]:
+    if options["replace"]:
         data = [
-            (options["repls"][n], v, s, l) if n in options["repls"] else (n, v, s, l) for n, v, s, l in data
+            (options["replace"][n], v, s, l) if n in options["replace"] else (n, v, s, l)
+            for n, v, s, l in data
         ]
 
     return sorted(data, key=lambda x: x[2] + len(x[1]) / sum(x[1]), reverse=not options["reverse"])
@@ -178,8 +179,8 @@ def load_csv(names, stats, options):
 
     names_orig = names[:]
 
-    if options["repls"]:
-        names = [options["repls"][n] if n in options["repls"] else n for n in names]
+    if options["replace"]:
+        names = [options["replace"][n] if n in options["replace"] else n for n in names]
 
     # processing (normal) separate data
     lens = [0 for n in names]

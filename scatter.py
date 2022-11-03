@@ -87,11 +87,11 @@ class Scatter(Plot, object):
         plt.ylim([self.y_min, self.y_max])
 
         # timeout lines
-        if self.tlb_loc != "none":
+        if self.tol_loc != "none":
             plt.axvline(self.timeout, linewidth=1, color="red", ls=":", label=str(self.timeout), zorder=3)
             plt.axhline(self.timeout, linewidth=1, color="red", ls=":", label=str(self.timeout), zorder=3)
 
-            if self.tlb_loc == "after":
+            if self.tol_loc == "after":
                 plt.text(
                     2 * self.x_min,
                     self.timeout + self.x_max / 40,
