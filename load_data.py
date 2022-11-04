@@ -1,10 +1,10 @@
+from typing import List, Dict
 import json
-from typing import List
 import numpy as np
 
 
 class Program:
-    def __init__(self, program_name: str, program_alias: str, positive_instance_stats: List[float]):
+    def __init__(self, program_name: str, program_alias: str, positive_instance_stats: Dict[str, float]):
         self.name = program_name
         self.alias = program_alias
         self.stats = positive_instance_stats
@@ -16,16 +16,16 @@ class Program:
         return self.alias
 
     def get_max_val(self) -> float:
-        return max(self.stats)
+        return max(self.get_values())
 
     def get_min_val(self) -> float:
-        return min(self.stats)
+        return min(self.get_values())
 
     def get_average_val(self) -> float:
-        return np.average(self.stats)
+        return np.average(self.get_values())
 
     def get_values(self) -> List[float]:
-        return self.stats
+        return list(self.stats.values())
 
     def __len__(self):
         return len(self.stats)
@@ -42,13 +42,13 @@ def load_json_data_from_file(file_path, stat_type, max_val, min_val) -> Program:
     name = data["preamble"]["program"]
     alias = data["preamble"]["prog_alias"]
 
-    solved_stat = []
-    for _, entry in data["stats"].items():
+    solved_stat = {}
+    for name, entry in data["stats"].items():
         if entry["status"]:
             # Get the value and check the requirements
             value = entry[stat_type]
             if min_val <= value <= max_val:
-                solved_stat.append(value)
+                solved_stat[name] = value
 
     return Program(name, alias, solved_stat)
 
