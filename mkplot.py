@@ -93,7 +93,7 @@ def get_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "-p",
-        "--plot-type",
+        "--plot_type",
         type=str,
         choices=["cactus", "scatter"],
         default="cactus",
@@ -151,18 +151,15 @@ def main():
 
     # Check if computing stats or plotting
     if args["dry_run"]:
-        # TODO such poor variable naming! what are we iterating over????
-        for alias, program in data.items():
-
+        for program in data:
             print()
-            print(f"{alias}:")
+            print(f"{program.get_alias()}:")
             print(f"    # solved: {len(program)}")
             print(f"    min. val: {program.get_min_val():.1f}")
             print(f"    max. val: {program.get_max_val():.1f}")
             print(f"    avg. val: {program.get_average_val():.1f}")
     else:
         # Initialise plotting style
-        # TODO move reverse to the plotting part!!
         if args["plot_type"] == "cactus":
             plotter = Cactus(args)
         else:
