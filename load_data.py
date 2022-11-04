@@ -1,5 +1,5 @@
 import json
-from typing import List, Dict
+from typing import List
 import numpy as np
 
 
@@ -53,7 +53,7 @@ def load_json_data_from_file(file_path, stat_type, max_val, min_val) -> Program:
     return Program(name, alias, solved_stat)
 
 
-def load_data(file_paths, args) -> Dict[str, Program]:
+def load_data(file_paths, args) -> List[Program]:
 
     # Compute the min value
     if args["plot_type"] == "scatter" and args["x_min"]:
@@ -72,7 +72,7 @@ def load_data(file_paths, args) -> Dict[str, Program]:
         raise ValueError(f"Unknown data type \"{args['data_type']}\"")
 
     # Return Program attempt objects as a dict
-    return {p.get_alias(): p for p in data}
+    return data
 
 
 if __name__ == "__main__":
