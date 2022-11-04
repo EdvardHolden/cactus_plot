@@ -14,6 +14,7 @@ def load_data(files, options):
     try:  # if JSON data
         return load_json(statutil.StatArray(files), options)
     except statutil.JSONException as e:
+        # TODO probably should not support CSV calues as it is unclear what is the timeout variablem, e.g. -1 or None?
         sys.stderr.write("\033[33;1mWarning:\033[m " + str(e) + "\033[m\n")
         sys.stderr.write("Probably not a JSON format. Trying to read as CSV.\n")
 
@@ -40,6 +41,7 @@ def load_json(stat_arr, options):
     """
     Loads runtime data from STAT objects.
     """
+    print("HERE")
 
     # preparing data
     if options["join_key"]:
@@ -158,6 +160,7 @@ def load_csv(names, stats, options):
     """
 
     # choosing the minimal value
+    # TODO obvious code duplication
     min_val = 0.000000001
     if options["plot_type"] == "scatter":
         if options["x_min"]:

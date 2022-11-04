@@ -56,7 +56,7 @@ def load_json_data_from_file(file_path, stat_type, max_val, min_val) -> Program:
 def load_data(file_paths, args) -> Dict[str, Program]:
 
     # Compute the min value
-    if args["plot_type"] == "scatter" and args['x_min']:
+    if args["plot_type"] == "scatter" and args["x_min"]:
         min_val = max(args["x_min"], args["y_min"])
     else:
         min_val = args["y_min"]  # options['y_min'] is always defined
@@ -65,6 +65,7 @@ def load_data(file_paths, args) -> Dict[str, Program]:
     data = []
     if args["data_type"] == "json":
         for file_path in file_paths:
+            print(f"Loading: {file_path}")
             file_data = load_json_data_from_file(file_path, args["stat_type"], args["timeout"], min_val)
             data += [file_data]
     else:

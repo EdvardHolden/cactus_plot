@@ -1,24 +1,22 @@
 import matplotlib
 import numpy as np
+import argparse
 
 matplotlib.use("pdf")  # for not loading GUI modules
 
+from load_data import load_data
 from cactus import Cactus
-from load import load_data
 from scatter import Scatter
 
 
-#
-# ==============================================================================
-
-import argparse
-
-
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
 
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
-    parser.add_argument("data", nargs="+", help="Path to the json data files")
+    parser.add_argument("data", nargs="+", help="Path or specification of the data input")
+    parser.add_argument(
+        "--data_type", type=str, choices=["json"], default="json", help="Type of data to load"
+    )
 
     parser.add_argument(
         "--def_path",
@@ -66,7 +64,9 @@ def get_parser():
         default=None,
         help="Comma-separated list of keys to join all benchmarks per each tool",
     )
-    parser.add_argument("-k", "--key", type=str, default="rtime", help=" Key to measure")
+    parser.add_argument(
+        "-s", "--stat_type", type=str, default="rtime", help=" Statistics value to measure (Only for json)"
+    )
     parser.add_argument("-l", "--usetex", action="store_true", help="Use latex")
 
     parser.add_argument(
@@ -91,7 +91,6 @@ def get_parser():
     parser.add_argument(
         "-n", "--by_name", action="store_true", help="Assign line style to tools by their name"
     )
-    parser.add_argument("--only", nargs="*", default=None, help="Comma-separated list of names")
     parser.add_argument(
         "-p",
         "--plot-type",
@@ -136,8 +135,6 @@ def get_parser():
     parser.add_argument("--y_max", type=int, default=None, help="Y axis ends at this value")
     parser.add_argument("--y_min", type=int, default=0, help="Y axis starts from this value")
 
-    # TODO add input format
-
     return parser
 
 
@@ -154,16 +151,18 @@ def main():
 
     # Check if computing stats or plotting
     if args["dry_run"]:
-        for d in data:
-            d1 = list(map(lambda x: min(x, args["timeout"]), d[1]))
+        # TODO such poor variable naming! what are we iterating over????
+        for alias, program in data.items():
 
-            print("{0}:".format(d[0]))
-            print("    # solved: {0}".format(d[2]))
-            print("    min. val: {0:.1f}".format(float(min(d1))))
-            print("    max. val: {0:.1f}".format(float(max(d1))))
-            print("    avg. val: {0:.1f}".format(float(sum(d1)) / len(d1)))
+            print()
+            print(f"{alias}:")
+            print(f"    # solved: {len(program)}")
+            print(f"    min. val: {program.get_min_val():.1f}")
+            print(f"    max. val: {program.get_max_val():.1f}")
+            print(f"    avg. val: {program.get_average_val():.1f}")
     else:
         # Initialise plotting style
+        # TODO move reverse to the plotting part!!
         if args["plot_type"] == "cactus":
             plotter = Cactus(args)
         else:
