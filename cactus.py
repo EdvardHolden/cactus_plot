@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 from matplotlib import __version__ as mpl_version
 import math
 import numpy as np
+from typing import List
+
+from load_data import Program
 from plot import Plot
-import six
 
 
-#
-# ==============================================================================
 class Cactus(Plot, object):
     """
     Cactus plot class.
@@ -24,38 +24,44 @@ class Cactus(Plot, object):
         with open(self.def_path, "r") as fp:
             self.linestyles = json.load(fp)["cactus_linestyle"]
 
-    def create(self, data):
+    def create(self, data: List[Program]):
         """
         Does the plotting.
         """
 
-        # making lines
+        # Make x and y line plot from the data
         coords = []
-        for d in data:
-            coords.append(np.arange(1, len(d[1]) + 1))  # xs (separate for each line)
-            coords.append(np.array(sorted(d[1])))
+        for prog in data:
+            coords.append(np.arange(1, len(prog) + 1))  # xs (separate for each line)
+            coords.append(np.array(sorted(prog.get_values())))
         lines = plt.plot(*coords, zorder=3)
 
         # setting line styles
         if not self.byname:  # by default, assign fist line to best tool
             lmap = lambda i: i
         else:  # assign line styles by tool name
-            tnames = [(d[0], i) for i, d in enumerate(data)]
+            tnames = [(prog.get_alias(), i) for i, prog in enumerate(data)]
             tnames.sort(key=lambda pair: pair[0])
             tmap = {tn[1]: i for i, tn in enumerate(tnames)}
             lmap = lambda i: tmap[i]
 
+        # Set the line-styles
         for i, l in enumerate(lines):
             plt.setp(l, **self.linestyles[lmap(i) % len(self.linestyles)])
 
-        # turning the grid on
+        # Turning the grid on
         if not self.no_grid:
             plt.grid(True, color=self.grid_color, ls=self.grid_style, lw=self.grid_width, zorder=1)
 
-        # axes limits
-        plt.xlim(
-            self.x_min, self.x_max if self.x_max else math.ceil(max([d[2] for d in data]) / float(100)) * 100
-        )
+        #  Compute the x-axis limit
+        if self.x_max:
+            x_max = self.x_max
+        else:
+            # Make sure that the last values are not crammed in the corner
+            x_max = math.ceil(max([len(prog) for prog in data]) / float(100)) * 100
+
+        # Set the axis limits
+        plt.xlim(self.x_min, x_max)
         plt.ylim(self.y_min, self.y_max if self.y_max else self.timeout)
 
         # axes labels
@@ -76,14 +82,6 @@ class Cactus(Plot, object):
         if self.y_log:
             ax.set_yscale("log")
 
-        # setting ticks
-        # plt.xticks(np.arange(self.x_min, self.x_max + 1, 2))
-        # if not self.y_log:
-        #     # plt.yticks(list(plt.yticks()[0]) + [self.timeout])
-        #     ax.set_yticks(range(0, 2 * (int(self.y_max) if self.y_max else int(self.timeout)), 200))
-
-        # setting ticks font properties
-        # set_*ticklables() seems to be not needed in matplotlib 1.5.0
         if float(mpl_version[:3]) < 1.5:
             ax.set_xticklabels(ax.get_xticks(), self.f_props)
             ax.set_yticklabels(ax.get_yticks(), self.f_props)
@@ -93,9 +91,9 @@ class Cactus(Plot, object):
         ax.xaxis.set_major_formatter(strFormatter if not self.x_log else logFormatter)
         ax.yaxis.set_major_formatter(strFormatter if not self.y_log else logFormatter)
 
-        # making the legend
+        # Making the legend
         if self.lgd_loc != "off":
-            lgtext = [d[0] for d in data]
+            lgtext = [prog.get_alias() for prog in data]
             lg = ax.legend(
                 lines,
                 lgtext,
@@ -109,8 +107,9 @@ class Cactus(Plot, object):
             fr.set_alpha(self.lgd_alpha)
             fr.set_edgecolor("black")
 
-        # setting frame thickness
-        for i in six.itervalues(ax.spines):
-            i.set_linewidth(1)
+        # Setting frame thickness
+        for axis in ["top", "bottom", "left", "right"]:
+            ax.spines[axis].set_linewidth(1)
 
         plt.savefig(self.save_to, bbox_inches="tight", transparent=self.transparent)
+        print("Saved to:", self.save_to)

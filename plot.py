@@ -47,7 +47,7 @@ class Plot:
         self.byname = options["by_name"]
 
         # where to save
-        self.save_to = "{os.path.splitext(self.save_to)[0]}.{self.backend}"
+        self.save_to = f"{os.path.splitext(self.save_to)[0]}.{self.backend}"
 
         # font properties
         self.f_props = {
