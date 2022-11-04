@@ -128,12 +128,12 @@ def get_parser() -> argparse.ArgumentParser:
 
     parser.add_argument("--x_label", type=str, help="X label")
     parser.add_argument("--x_log", action="store_true", help="Use logarithmic scale for X axis")
-    parser.add_argument("--x_max", type=int, default=None, help="X axis ends at this value")
-    parser.add_argument("--x_min", type=int, default=0, help="X axis starts from this value")
+    parser.add_argument("--x_max", type=float, default=None, help="X axis ends at this value")
+    parser.add_argument("--x_min", type=float, default=0, help="X axis starts from this value")
     parser.add_argument("--y_label", type=str, help="Y label")
     parser.add_argument("--y_log", action="store_true", help="Use logarithmic scale for Y axis")
-    parser.add_argument("--y_max", type=int, default=None, help="Y axis ends at this value")
-    parser.add_argument("--y_min", type=int, default=0, help="Y axis starts from this value")
+    parser.add_argument("--y_max", type=float, default=None, help="Y axis ends at this value")
+    parser.add_argument("--y_min", type=float, default=0, help="Y axis starts from this value")
 
     return parser
 
