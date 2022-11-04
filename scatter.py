@@ -1,15 +1,3 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-#
-# scatter.py
-#
-#  Created on: Jun 05, 2015
-#      Author: Alexey S. Ignatiev
-#      E-mail: aignatiev@ciencias.ulisboa.pt
-#
-
-#
-# ==============================================================================
 import json
 import math
 import matplotlib.pyplot as plt

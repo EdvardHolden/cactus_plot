@@ -1,15 +1,3 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-#
-# cactus.py
-#
-#  Created on: Jun 05, 2015
-#      Author: Alexey S. Ignatiev
-#      E-mail: aignatiev@ciencias.ulisboa.pt
-#
-
-#
-# ==============================================================================
 import json
 import matplotlib.pyplot as plt
 from matplotlib import __version__ as mpl_version

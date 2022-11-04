@@ -1,15 +1,3 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-#
-# plot.py
-#
-#  Created on: Jun 05, 2015
-#      Author: Alexey S. Ignatiev
-#      E-mail: aignatiev@ciencias.ulisboa.pt
-#
-
-#
-# ==============================================================================
 import matplotlib.pyplot as plt
 import numpy as np
 import os
