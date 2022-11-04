@@ -27,6 +27,12 @@ class Program:
     def get_values(self) -> List[float]:
         return list(self.stats.values())
 
+    def get_instance_names(self) -> List[str]:
+        return list(self.stats.keys())
+
+    def get_instances(self) -> Dict[str, float]:
+        return self.stats
+
     def __len__(self):
         return len(self.stats)
 
@@ -73,6 +79,33 @@ def load_data(file_paths, args) -> List[Program]:
 
     # Return Program attempt objects as a dict
     return data
+
+
+def join_data(data: List[Program]) -> List[Program]:
+    """
+    Takes a list of programs and returns the truncated programs based
+    on their intersection of solved instances.
+    """
+    # Need at least two programs to join
+    if len(data) < 2:
+        return data
+
+    # Compute the intersection
+    inter = set(data[0].get_instance_names())
+    for prog in data[1:]:
+        inter = inter.intersection(prog.get_instance_names())
+
+    # Truncate entries
+    new_data = []
+    for prog in data:
+        # Join on the correct order
+        curr_inst = prog.get_instances()
+        new_prog = Program(
+            prog.get_name(), prog.get_alias(), {inst_name: curr_inst[inst_name] for inst_name in inter}
+        )
+        new_data += [new_prog]
+
+    return new_data
 
 
 if __name__ == "__main__":

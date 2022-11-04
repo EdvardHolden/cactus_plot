@@ -163,6 +163,10 @@ def main():
         if args["plot_type"] == "cactus":
             plotter = Cactus(args)
         else:
+            if len(data) != 2:
+                raise ValueError(
+                    f"Scatter plot only supports two program/experiments at a time. {len(data)} provided."
+                )
             plotter = Scatter(args)
 
         # Create the plot
