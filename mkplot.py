@@ -1,17 +1,5 @@
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-#
-# mkplot.py
-#
-#  Created on: Jan 31, 2014
-#      Author: Alexey S. Ignatiev
-#      E-mail: aignatiev@ciencias.ulisboa.pt
-#
-
-#
-# ==============================================================================
-from __future__ import print_function
 import matplotlib
+import numpy as np
 
 matplotlib.use("pdf")  # for not loading GUI modules
 
@@ -28,7 +16,7 @@ import argparse
 
 def get_parser():
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 
     parser.add_argument("data", nargs="+", help="Path to the json data files")
 
@@ -55,7 +43,7 @@ def get_parser():
     )
     parser.add_argument(
         "-d",
-        "--dry-run",
+        "--dry_run",
         action="store_true",
         help="Do not create a plot but instead show the tools sorted in the terminal",
     )
@@ -124,7 +112,7 @@ def get_parser():
         choices=["long", "squared", "standard"],
         help="Shape of the plot",
     )
-    parser.add_argument("-t", "--timeout", type=int, default=305, help="Timeout value")
+    parser.add_argument("-t", "--timeout", type=int, default=np.inf, help="Timeout value")
     parser.add_argument("--t_label", type=str, help="Timeout label (for scatter plots only)")
     parser.add_argument(
         "--tol_loc",
@@ -147,6 +135,8 @@ def get_parser():
     parser.add_argument("--y_log", action="store_true", help="Use logarithmic scale for Y axis")
     parser.add_argument("--y_max", type=int, default=None, help="Y axis ends at this value")
     parser.add_argument("--y_min", type=int, default=0, help="Y axis starts from this value")
+
+    # TODO add input format
 
     return parser
 
