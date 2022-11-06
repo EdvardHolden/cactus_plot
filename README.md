@@ -1,68 +1,79 @@
-# mkplot
+# Cactus Plot
 
-A Python script to create cactus and scatter plots based on the [matplotlib](http://matplotlib.org/) plotting library. The script makes use of only a tiny subset of what matplotlib can do.
+A Python script to quickly create cactus and scatter plots.
 
-mkplot was originally designed to make my life a lot easier by automating the plotting tasks, which a typical CS researcher has to deal with quite often. After a few years of using the script, I realized that it may be helpful for some other people (hopefully!) and so to make it publicly available. Enjoy! :)
+It generates plots from either json data in a specified, but simple to obtain format; or directly
+from the datase used in the iProver group. The data loader can quickly be adapted to support other
+databases or file formats.
+
 
 ## Getting Started
 
-First of all, make sure you have a Python interpreter installed. To run the script, you also need to install the [matplotlib](http://matplotlib.org/) library. Please, see the corresponding [installation instructions](http://matplotlib.org/users/installing.html). Once matplotlib is installed on your computer, you can start using mkplot.
+Python3 and matplotlib is required.
+For some of the options seaborn and multiple latex packages are required.
 
 ## Usage
 
-The script has a number of parameters, which can be set from the command line. To see the list of options, run:
+The script implements argparse so to inspect program arguments, run:
 
 ```
-mkplot.py -h
+python3 mkplot.py -h
 ```
 
 ### Input Format
 
 The data to plot can be given in one of the two formats:
 
-* [JSON](https://en.wikipedia.org/wiki/JSON)
-* [CSV](https://en.wikipedia.org/wiki/Comma-separated_values)
+* [JSON Files](https://en.wikipedia.org/wiki/JSON)
+* JSON string specifying the databse experiments
+ 
 
-While the CSV format is a simple table of values aggregating all the data, the preferred format is a series of JSON files, which describe the data for an individual tool/solver  following this example:
+#### JSON Files
+The format of the json files should be as follows;
+
 
 ```json
 {
 	"preamble": {
 		"program": "program-name",
-		"prog_args": "-a some -b program --arguments",
 		"prog_alias": "some-short-alias-to-use-in-the-plot",
-		"benchmark": "name-of-benchmark-set"
 	},
 	"stats": {
 		"some_problem_instance": {
 			"status": true,
-			"rtime": 10.567,
-			"mempeak": "171864 KiB",
-			"some-other-key": "key-value1"
+			"rtime": 10.567
 		},
 		"another_problem_instance": {
 			"status": false,
-			"rtime": 1000.00,
-			"mempeak": "245759 KiB",
-			"some-other-key": "key-value2"
-		},
-		"instance3": {
-			"status": true,
-			"rtime": 256.32,
-			"mempeak": "57261 KiB",
-			"some-other-key": "key-value3"
+			"rtime": 1000.00
 		}
 	}
 }
 ```
 
-Here, the data describes the result of running a tool referred to as *"program-name"* with the given list of command-line arguments on a benchmark set called *"name-of-benchmark-set"* containing three problem instances. The result for each instance **must** have the information on its status: *true* or *false* meaning that the instance is solved or unsolved, respectively. All the other fields are non-mandatory (you can use whatever key/value you want). However, note that the *rtime* key is used by default when working with JSON files (to change this use the `-k` option).
 
-For further details of the input format, please, see the [example files](examples).
+Here, the data describes the result of running a tool referred to as *"program-name", containing three problem instances.
+The result for each instance **must** have the information on its status: *true* or *false* meaning that the instance is solved or unsolved,
+respectively. All the other fields are non-mandatory (you can use whatever key/value you want). 
+However, note that the *rtime* key is used by default when working with JSON files (to change this use the `-k` option).
 
-### Using mkplot
+For more details on the JSON files, see the [example files](examples).
 
-A few usage examples of mkplot follow.
+#### JSON Strings
+
+These string is a dictionary mapping of the experiment_id-alias value pairs in the database.
+They should in the following format:`{"id1": "alias1", "id2": "alias2"}`.
+
+An example is: `{"12897": "iprover_inst", "12904": "iprover_sup"}`.
+
+If the set of experiments are ran in the LTB context, set the `--db_data_ltb` when calling the script.i
+
+
+
+
+## Using mkplot
+
+### Cactus Plot
 
 For instance, running
 
@@ -74,17 +85,17 @@ results in a simple cactus plot showing the performance of `very-nice-solver` an
 
 Here, mkplot is set to show program aliases in the legend instead of their complete names.
 
-If you need to create a scatter plot detailing the difference between the two solvers, just do
+### Scatter Plot
+If you need to create a scatter plot detailing the metric difference between the instances solved by both solver, just do;
 
 ```
-mkplot.py -p scatter -b png --save-to examples/scatter.png --shape squared -t 1000 --ylog --ymax 10000 --ymin 0.1 --xlog examples/csv-data.csv
+mkplot.py -p scatter -b png --save-to examples/scatter.png --shape squared -t 1000 --ylog --ymax 10000 --ymin 0.1 --xlog examples/solver?.json
 ```
 
 The resulting scatter plot is the following:
 
 ![a scatter plot](examples/scatter.png)
 
-Observe that here instead of JSON files, a CSV table is used.
 
 ## License
 
