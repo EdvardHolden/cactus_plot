@@ -67,7 +67,7 @@ A few usage examples of mkplot follow.
 For instance, running
 
 ```
-mkplot.py -l --legend prog_alias -t 1000 -b png --save-to examples/cactus.png examples/solver?.json
+mkplot.py --legend prog_alias -t 1000 -b png --save-to examples/cactus.png examples/solver?.json
 ```
 
 results in a simple cactus plot showing the performance of `very-nice-solver` and `another-good-tool`: ![cactus plot](examples/cactus.png)
@@ -77,7 +77,7 @@ Here, mkplot is set to show program aliases in the legend instead of their compl
 If you need to create a scatter plot detailing the difference between the two solvers, just do
 
 ```
-mkplot.py -l -p scatter -b png --save-to examples/scatter.png --shape squared -t 1000 --ylog --ymax 10000 --ymin 0.1 --xlog examples/csv-data.csv
+mkplot.py -p scatter -b png --save-to examples/scatter.png --shape squared -t 1000 --ylog --ymax 10000 --ymin 0.1 --xlog examples/csv-data.csv
 ```
 
 The resulting scatter plot is the following:
