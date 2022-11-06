@@ -15,7 +15,14 @@ def get_parser() -> argparse.ArgumentParser:
 
     parser.add_argument("data", nargs="+", help="Path or specification of the data input")
     parser.add_argument(
-        "--data_type", type=str, choices=["json"], default="json", help="Type of data to load"
+        "--data_type",
+        type=str,
+        choices=["json", "db"],
+        default="json",
+        help="Type of data to load. Json is lsit of json files. DB is json specification of {exp_id: alias}",
+    )
+    parser.add_argument(
+        "--db_data_ltb", action="store_true", help="Specify if the DB experiments are on LTB data"
     )
 
     parser.add_argument(
@@ -78,8 +85,8 @@ def get_parser() -> argparse.ArgumentParser:
         default="proram",
         help="Comma-separated list of keys to use in the legend of a plot) Format: program,prog_args",
     )
-    parser.add_argument("lgd_fancy", action="store_true", help="Make the legend fancy??`")
-    parser.add_argument("lgd_shadow", action="store_true", help="Make the legend shadowy??")
+    parser.add_argument("--lgd_fancy", action="store_true", help="Make the legend fancy??`")
+    parser.add_argument("--lgd_shadow", action="store_true", help="Make the legend shadowy??")
     parser.add_argument(
         "--lgd_loc",
         type=str,
