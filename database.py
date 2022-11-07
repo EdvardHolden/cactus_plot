@@ -1,3 +1,4 @@
+import mysql.connector as db_connect
 import traceback
 
 LIBRARY_VERSION = 64
@@ -9,7 +10,6 @@ class DB:
 
         # Let this fail if not present
         import db_cred
-        import mysql.connector as db_connect
 
         # Set the DB connection details
         self.db_conn_details = db_cred.db_connection_details
