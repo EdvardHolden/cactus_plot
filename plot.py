@@ -34,7 +34,10 @@ class Plot:
         self.y_max = options["y_max"]
         self.y_min = options["y_min"]
 
-        self.lgd_loc = options["lgd_loc"]
+        if options["lgd_loc"] == "outside":
+            self.lgd_loc = (1.05, 0.5)
+        else:
+            self.lgd_loc = options["lgd_loc"]
         self.lgd_ncol = options["lgd_ncol"]
         self.lgd_alpha = options["lgd_alpha"]
         self.lgd_fancy = options["lgd_fancy"]

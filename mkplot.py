@@ -90,8 +90,8 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--lgd_loc",
         type=str,
-        default="upper left",
-        help="Legend location. Available values: upper/center/lower left/right, center, best, off",
+        default="outside",
+        help="Legend location. Available values: upper/center/lower left/right, center, best, outside, off",
     )
     parser.add_argument("--lgd_ncol", type=int, default=1, help="Number of columns in the legend")
 
