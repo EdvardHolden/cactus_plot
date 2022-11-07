@@ -110,3 +110,5 @@ class Plot:
         # funny mode
         if options["xkcd"]:
             plt.xkcd()
+
+        self.seaborn = options["seaborn"]

@@ -71,6 +71,11 @@ class Scatter(Plot, object):
         if len(data[0]) != len(data[1]):
             raise ScatterException("Number of instances for each competitor must be the same")
 
+        if self.seaborn:
+            import seaborn as sns
+
+            sns.set()  # set_theme
+
         step = math.ceil((self.x_max - self.x_min) / 10)
         x = np.arange(self.x_min, self.x_max + self.x_min + step, step)
 

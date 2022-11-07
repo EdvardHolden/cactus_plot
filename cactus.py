@@ -29,14 +29,19 @@ class Cactus(Plot, object):
         Does the plotting.
         """
 
+        if self.seaborn:
+            import seaborn as sns
+
+            sns.set()  # set_theme
+
         # Make x and y line plot from the data
         coords = []
         for prog in data:
             coords.append(np.arange(1, len(prog) + 1))  # xs (separate for each line)
             coords.append(np.array(sorted(prog.get_values())))
-        lines = plt.plot(*coords, zorder=3)
 
-        # setting line styles
+        lines = plt.plot(*coords, zorder=3)
+        # Compute line styles - do not want to do it if using seaborn
         if not self.byname:  # by default, assign fist line to best tool
             lmap = lambda i: i
         else:  # assign line styles by tool name
@@ -45,9 +50,10 @@ class Cactus(Plot, object):
             tmap = {tn[1]: i for i, tn in enumerate(tnames)}
             lmap = lambda i: tmap[i]
 
-        # Set the line-styles
-        for i, l in enumerate(lines):
-            plt.setp(l, **self.linestyles[lmap(i) % len(self.linestyles)])
+        # Set the line-styles if not using seaborn
+        if not self.seaborn:
+            for i, l in enumerate(lines):
+                plt.setp(l, **self.linestyles[lmap(i) % len(self.linestyles)])
 
         # Turning the grid on
         if not self.no_grid:

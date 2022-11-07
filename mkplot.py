@@ -122,6 +122,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--vbs", type=str, default=None, help="List of VBSes"
     )  # Format: {"vbs1": ["tool1", "tool2"], "vbs2": "all"}
     parser.add_argument("--xkcd", action="store_true", help="Use xkcd-style sketch plotting")
+    parser.add_argument("--seaborn", action="store_true", help="Use seaborn to plot")
 
     parser.add_argument("--x_label", type=str, help="X label")
     parser.add_argument("--x_log", action="store_true", help="Use logarithmic scale for X axis")

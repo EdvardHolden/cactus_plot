@@ -61,6 +61,7 @@ def load_json_data_from_file(file_path, stat_type, max_val, min_val) -> Program:
 
 def load_experiment_data_from_db(exp_id, alias, max_val, min_val, ltb):
     from database import DB  # Importing here as it requires mysql that might  not be installed
+
     db = DB(ltb_problems=ltb)
     res = db.get_solved_problem_name_time(exp_id, upper_time_bound=max_val)
 
