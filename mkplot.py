@@ -28,7 +28,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--def_path",
         default="defaults.json",
-        help="Config file for loading the other paramters. Slightly strange...",
+        help="Config file for loading the other parameters. Slightly strange...",
     )
 
     parser.add_argument(
@@ -64,13 +64,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("--grid_style", default=":", help="The grid style")
     parser.add_argument("--grid_width", default="1", help="The grid width")
     parser.add_argument("--no-grid", action="store_true", help="Do not show the grid")
-    parser.add_argument(
-        "-j",
-        "--join-key",
-        nargs="*",
-        default=None,
-        help="Comma-separated list of keys to join all benchmarks per each tool",
-    )
+
     parser.add_argument(
         "-s", "--stat_type", type=str, default="rtime", help=" Statistics value to measure (Only for json)"
     )
@@ -106,10 +100,6 @@ def get_parser() -> argparse.ArgumentParser:
         default="cactus",
         help="Plot type to produce",
     )
-    parser.add_argument(
-        "-r", "--replace", type=str, default=None, help="List of name replacements"
-    )  # Format: {"name1": "$nice_name1$", "name2": "$nice_name2$"}
-    parser.add_argument("--reverse", action="store_true", help="Use reversed sorting")
     parser.add_argument("--save-to", type=str, default="plot", help="Where result figure should be saved")
     parser.add_argument(
         "--shape",
