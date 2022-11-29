@@ -40,7 +40,7 @@ class Program:
         return f"program_{self.get_name()}_alias_{self.get_alias()}_solved_{self.__len__()}"
 
 
-def load_json_data_from_file(file_path, stat_type, max_val, min_val) -> Program:
+def load_json_data_from_file(file_path, stat_type, max_val, min_val, ids=None) -> Program:
     with open(file_path, "rb") as f:
         data = json.load(f)
 
@@ -50,6 +50,11 @@ def load_json_data_from_file(file_path, stat_type, max_val, min_val) -> Program:
 
     solved_stat = {}
     for name, entry in data["stats"].items():
+
+        # Check whether name is in set - if using
+        if ids is not None and name not in ids:
+            continue # Skip entry
+        # Check that it was solved
         if entry["status"]:
             # Get the value and check the requirements
             value = entry[stat_type]
@@ -59,11 +64,11 @@ def load_json_data_from_file(file_path, stat_type, max_val, min_val) -> Program:
     return Program(name, alias, solved_stat)
 
 
-def load_experiment_data_from_db(exp_id, alias, max_val, min_val, ltb):
+def load_experiment_data_from_db(exp_id, alias, max_val, min_val, ltb, problem_set):
     from database import DB  # Importing here as it requires mysql that might  not be installed
 
     db = DB(ltb_problems=ltb)
-    res = db.get_solved_problem_name_time(exp_id, upper_time_bound=max_val)
+    res = db.get_solved_problem_name_time(exp_id, upper_time_bound=max_val, problem_set=problem_set)
 
     # Filter on lower time bound
     res = list(filter(lambda x: x[1] >= min_val, res))
@@ -72,6 +77,14 @@ def load_experiment_data_from_db(exp_id, alias, max_val, min_val, ltb):
     res = {k: v for k, v in res}
 
     return Program(exp_id, alias, res)
+
+
+def load_ids(prob_set_file: str) -> List[str]:
+     with open(prob_set_file, "r") as f:
+         prob_set = f.readlines()
+
+     prob_set = [prob.strip() for prob in prob_set]
+     return prob_set
 
 
 def load_data(data_paths, args) -> List[Program]:
@@ -83,11 +96,16 @@ def load_data(data_paths, args) -> List[Program]:
         min_val = args["y_min"]  # options['y_min'] is always defined
 
     # Load the data into a list of program objects
+    if args["dataset"] is not None:
+        ids = load_ids(args["dataset"])
+    else:
+        ids = None
+
     data = []
     if args["data_type"] == "json":
         for data_path in data_paths:
             print(f"Loading: {data_path}")
-            file_data = load_json_data_from_file(data_path, args["stat_type"], args["timeout"], min_val)
+            file_data = load_json_data_from_file(data_path, args["stat_type"], args["timeout"], min_val, ids)
             data += [file_data]
 
     elif args["data_type"] == "db":
@@ -102,7 +120,7 @@ def load_data(data_paths, args) -> List[Program]:
         for exp_id, alias in exp_data.items():
             print("# Loading: ", exp_id, alias)
             exp_data = load_experiment_data_from_db(
-                exp_id, alias, args["timeout"], min_val, args["db_data_ltb"]
+                exp_id, alias, args["timeout"], min_val, args["db_data_ltb"], ids
             )
             data += [exp_data]
 
@@ -143,10 +161,10 @@ def join_data(data: List[Program]) -> List[Program]:
 def test():
     # Testing function
     print("Test load from json")
-    d = load_json_data_from_file("examples/solver2.json", "rtime", 500, 0)
+    d = load_json_data_from_file("examples/solver2.json", "rtime", 500, 0, None)
     print(d)
     print("Test load from db")
-    d = load_experiment_data_from_db(117213, "test_alias", 200, 0, False)
+    d = load_experiment_data_from_db(117213, "test_alias", 200, 0, False, None)
     print(d)
 
 

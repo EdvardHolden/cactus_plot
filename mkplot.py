@@ -19,11 +19,13 @@ def get_parser() -> argparse.ArgumentParser:
         type=str,
         choices=["json", "db"],
         default="json",
-        help="Type of data to load. Json is lsit of json files. DB is json specification of {exp_id: alias}",
+        help="Type of data to load. Json is list of json files. DB is json specification of {exp_id: alias}",
     )
     parser.add_argument(
         "--db_data_ltb", action="store_true", help="Specify if the DB experiments are on LTB data"
     )
+    parser.add_argument('--dataset', default=None,
+                        help="Path to file containing ids (problem names) used to subset the data")
 
     parser.add_argument(
         "--def_path",
